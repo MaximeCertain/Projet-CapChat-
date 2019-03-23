@@ -1,0 +1,211 @@
+<head>
+        <style>
+                #myProgress {
+                    width: 100%;
+                    background-color: grey;
+                  }
+                  
+                  #myBar {
+                    width: 1%;
+                    height: 30px;
+                    background-color: orange;
+                  }
+        </style>
+    </head><body>
+        <h1 id="result"></h1>
+<canvas id="canvas" width="600" height="300" onclick="onclick_page(event);" style="border:1px solid black;">
+    Le canvas ne s'affiche pas
+</canvas>
+<h1>Cliquez sur l'image correspondante</h1>
+<h1 id="question"><%= question %></h1>
+<div id="myProgress">
+    <div id="myBar"></div>
+
+  </div>
+  <p id="oui"></p>
+</body>
+<script>
+var widthMax = "<%= maxWidth %>";
+move(widthMax);
+
+console.log(widthMax);
+document.getElementById("myProgress").style.width = widthMax + '%';
+
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");       
+x=0;
+y=0;
+//variables de détection de l'emplacement du clic
+ maxX = 0;
+ minX = 0;
+ maxY = 0;
+ minY = 0;
+
+var img = new Image();   // Crée un nouvel élément Image
+img.addEventListener('load', function() {
+   ctx.drawImage(img, x, y,150,150);
+   ctx.stroke();
+}, false);
+//var getTest ="<%= imagesCapChat[0][0] %>";  //var test is now assigned to getTest which will only work on browsers
+img.src = "<%= imagesCapChat[0][0] %>"; // Définit le chemin vers sa source
+
+<% if(imagesCapChat[0][1] != ""){ %>
+   minX = 0;
+   maxX = 150;
+   minY =0;
+   maxY =150;
+   <% } %>
+var img2 = new Image();   // Crée un nouvel élément Image
+img2.addEventListener('load', function() {   
+   ctx.drawImage(img2, 150, y,150,150);
+   ctx.stroke();
+}, false);
+img2.src = "<%= imagesCapChat[1][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[1][1] != ""){ %>
+   minX = 150;
+   maxX = 300;
+   minY =0;
+   maxY =150;
+   <% } %>
+var img3 = new Image();   // Crée un nouvel élément Image
+img3.addEventListener('load', function() {   
+  ctx.drawImage(img3, 300, y,150,150);
+  ctx.stroke();
+}, false);
+img3.src = "<%= imagesCapChat[2][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[2][1] != ""){ %>
+  minX = 300;
+  maxX = 450;
+  minY =0;
+  maxY =150;
+  <% } %>
+
+var img4 = new Image();   // Crée un nouvel élément Image
+img4.addEventListener('load', function() {   
+ ctx.drawImage(img4, 450, y,150,150);
+ ctx.stroke();
+}, false);
+img4.src = "<%= imagesCapChat[3][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[3][1] != ""){ %>
+ minX = 450;
+ maxX = 600;
+ minY =0;
+ maxY =150;
+ <% } %>
+var img5 = new Image();   // Crée un nouvel élément Image
+img5.addEventListener('load', function() {   
+ctx.drawImage(img5,  0, 150,150,150);
+ctx.stroke();
+}, false);
+img5.src = "<%= imagesCapChat[4][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[4][1] != ""){ %>
+minX = 0;
+maxX = 150;
+minY =150;
+maxY =300;
+<% } %>  
+var img6 = new Image();   // Crée un nouvel élément Image
+img6.addEventListener('load', function() {   
+ctx.drawImage(img6, 150, 150,150,150);
+ctx.stroke();
+}, false);
+img6.src = "<%= imagesCapChat[5][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[5][1] != ""){ %>
+minX = 150;
+maxX = 300;
+minY =150;
+maxY =300;
+<% } %>
+var img7 = new Image();   // Crée un nouvel élément Image
+img7.addEventListener('load', function() {   
+ctx.drawImage(img7, 300, 150,150,150);
+ctx.stroke();
+}, false);
+img7.src = "<%= imagesCapChat[6][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[6][1] != ""){ %>
+minX = 300;
+maxX = 450;
+minY =150;
+maxY =300;   
+<% } %>
+
+var img8 = new Image();   // Crée un nouvel élément Image
+img8.addEventListener('load', function() {   
+ctx.drawImage(img8, 450, 150,150,150);
+ctx.stroke();
+}, false);
+img8.src = "<%= imagesCapChat[7][0] %>"; // Définit le chemin vers sa source
+<% if(imagesCapChat[7][1] != ""){ %>
+minX = 450;
+maxX = 600;
+minY =150;
+maxY =300;
+<% } %>
+
+var widthAffiche = widthMax;
+
+function move(widthMax) {
+  var elem = document.getElementById("myBar");    
+  var width = 1;
+  var id = setInterval(frame, widthMax);
+  document.getElementById("result").innerHTML = "Il vous reste " + (widthMax/10) + " secondes ";
+
+  function frame() {
+    widthAffiche--;
+    document.getElementById("result").innerHTML = "Il vous reste " + (widthAffiche/10) + " secondes ";
+
+      if(document.getElementById("result").innerHTML == "Bien joué le captcha est validé")
+    {
+      window.location.href = "http://127.0.0.1:8080/success";
+
+        clearInterval(id);
+      }
+      else if(widthAffiche/10 <=0)
+      {
+        window.location.href = "http://127.0.0.1:8080/ban";
+
+        clearInterval(id);
+      }
+ else if (width >= widthMax) {
+  document.getElementById("myProgress").style.width = widthMax + '%';
+  window.location.href = "http://127.0.0.1:8080/rate";
+      console.log(widthMax);
+      clearInterval(id);
+      document.getElementById("result").innerHTML = "Il vous reste " + (widthMax/10) + " secondes ";
+     // load();
+    }    
+    else if (document.getElementById("result").innerHTML == "Dommage, veuillez réessayer (0,5 secondes de moins)")
+    {
+        clearInterval(id);
+        document.getElementById("result").innerHTML = "Il vous reste " + (widthMax/10) + " secondes ";
+
+    }  
+    else if (document.getElementById("result").innerHTML == "Il vous restepour trouver" )
+    {
+        clearInterval(id);
+        document.getElementById("result").innerHTML = "Il vous reste " + (widthMax/10) + " secondes ";
+       // load();
+    }  
+    else {
+      width++; 
+      elem.style.width = width + '%'; 
+    }
+  }
+}
+function onclick_page(event)
+  {
+    var x = event.clientX;
+    var y = event.clientY;
+     if(x<maxX && x> minX && y < maxY && y > minY)
+        {
+            document.getElementById("result").innerHTML = "Bien joué le captcha est validé";
+            window.location.href = "http://127.0.0.1:8080/success";
+        } 
+        else
+        {
+            document.getElementById("result").innerHTML = "Dommage, veuillez réessayer (0,5 secondes de moins)";
+            window.location.href = "http://127.0.0.1:8080/rate";
+            console.log(widthMax);
+        }
+  } 
+</script>
