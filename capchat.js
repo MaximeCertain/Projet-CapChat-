@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var test = require('./Capchat/tableau'); // Fait appel à test.js (même dossier)
 app.use( express.static( "public" ) );
+var mysql = require('mysql');
 
 var questions = test.tableauQuestions;
 
@@ -22,14 +23,46 @@ var _getAllFilesFromFolder = function(dir) {
     });
     return results;
 };
+
+var mySqlClient = mysql.createConnection({
+    host     : "localhost",
+    user     : "root",
+    password : "",
+    database : "capchat"
+  });
+/*  var selectQuery = 'SELECT * FROM artiste';
+
+  mySqlClient.query(
+    selectQuery,
+    function select(error, results, fields) {
+      if (error) {
+        console.log(error);
+        mySqlClient.end();
+        return;
+      }
+        
+      if ( results.length > 0 )  { 
+        //var firstResult = results[ 0 ];
+        for(result in results)
+        {
+        console.log('id: ' + results[result]['id']);
+        console.log('label: ' + results[result]['prenom']);
+        console.log('valeur: ' + results[result]['nom']);
+        }
+        
+      } else {
+        console.log("Pas de données");
+      }
+      mySqlClient.end();
+    }
+  );*/
+
 var imagesCapChat = [];
 var question;
 var singuliers =[];
     var neutres = [];
 var imagesSingulieres = [];
 var maxWidth =100;
-
-
 
 function load()
 {
@@ -41,20 +74,17 @@ imagesSingulieres.splice(0, imagesSingulieres.length);*/
  singuliers = (_getAllFilesFromFolder("public/singuliers"));
  neutres = (_getAllFilesFromFolder("public/neutres"));
 
-
 var cpt =0;
 singuliers.forEach(element => {
       imagesSingulieres.push([element, questions[cpt]]);
       cpt++;
 });
 
-
 //ajout image singulières
 var rand = imagesSingulieres[Math.floor(Math.random() * imagesSingulieres.length)];
 
 imagesCapChat.push(rand);
 //ajout images neutres 
-
 
 for(var i =0; i<=6; i++){
     var rand = neutres[Math.floor(Math.random() * neutres.length)];
@@ -94,4 +124,4 @@ app.get('/init', function(req, res) {
     load();
     res.render('test.ejs', {imagesCapChat: imagesCapChat, question : question, maxWidth:maxWidth});
 });
-app.listen(8080);
+app.listen(8081);

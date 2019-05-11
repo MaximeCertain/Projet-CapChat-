@@ -156,19 +156,19 @@ function move(widthMax) {
 
       if(document.getElementById("result").innerHTML == "Bien joué le captcha est validé")
     {
-      window.location.href = "http://127.0.0.1:8080/success";
+      window.location.href = "http://127.0.0.1:8081/success";
 
         clearInterval(id);
       }
       else if(widthAffiche/10 <=0)
       {
-        window.location.href = "http://127.0.0.1:8080/ban";
+        window.location.href = "http://127.0.0.1:8081/ban";
 
         clearInterval(id);
       }
  else if (width >= widthMax) {
   document.getElementById("myProgress").style.width = widthMax + '%';
-  window.location.href = "http://127.0.0.1:8080/rate";
+  window.location.href = "http://127.0.0.1:8081/rate";
       console.log(widthMax);
       clearInterval(id);
       document.getElementById("result").innerHTML = "Il vous reste " + (widthMax/10) + " secondes ";
@@ -199,12 +199,12 @@ function onclick_page(event)
      if(x<maxX && x> minX && y < maxY && y > minY)
         {
             document.getElementById("result").innerHTML = "Bien joué le captcha est validé";
-            window.location.href = "http://127.0.0.1:8080/success";
+            window.location.href = "http://127.0.0.1:8081/success";
         } 
         else
         {
             document.getElementById("result").innerHTML = "Dommage, veuillez réessayer (0,5 secondes de moins)";
-            window.location.href = "http://127.0.0.1:8080/rate";
+            window.location.href = "http://127.0.0.1:8081/rate";
             console.log(widthMax);
         }
   } 

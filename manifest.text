@@ -1,0 +1,21 @@
+
+//créer un user 
+POST http://mywebsite.com/users
+
+//lister les utilisateurs
+GET http://mywebsite.com/users
+
+//lister le 7ème user
+GET http://mywebsite.com/users/7
+
+//supprimer le 7ème user
+DELETE http://mywebsite.com/users/7
+
+//afficher les users par nom
+GET http://mywebsite.com/users/?nom=test
+
+//afficher les users par nom
+GET http://mywebsite.com/login
+
+//modifier l'utilisateur 7
+PUT http://mywebsite.com/users/7
