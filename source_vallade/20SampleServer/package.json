@@ -4,7 +4,8 @@
   "description": "",
   "main": "SampleServer.js",
   "dependencies": {
-    "formidable": "^1.2.1"
+    "formidable": "^1.2.1",
+    "fs": "0.0.1-security"
   },
   "devDependencies": {},
   "scripts": {

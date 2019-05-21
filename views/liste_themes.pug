@@ -1,0 +1,16 @@
+html
+    include header.pug
+mixin vignetteCapchat(id, libelle)
+    tr.vignette
+        td.id= id
+        td.libelle= libelle
+
+h2= "Liste des Themes"
+table.table.table-hover
+    thead
+        tr
+            th(scope='col') id
+            th(scope='col') Thème
+    tbody
+    each theme in themes
+        +vignetteCapchat(theme.id, theme.libelle)

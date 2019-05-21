@@ -6,15 +6,16 @@ http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-      var oldpath = files.filetoupload.path;//Le formulaire est juste parsé
+      var oldpath = files.filetoupload.path;
+      //Le formulaire est juste parsé
       var newpath = "./fileupload/"+files.filetoupload.name;
  
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
         res.write('Fait !');
         res.end();
-      });
- });
+      });});
+
   } else {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');

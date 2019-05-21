@@ -1,0 +1,13 @@
+html
+    include header.pug
+
+h2 Ajouter un jeu d'image
+form(method='post', action='uploadFiles', enctype='multipart/form-data')
+    .form-group
+        select.custom-select
+            each theme in themes
+                option(value=theme.id) #{theme.libelle}
+    .form-group
+        input(type='file', name='filetoupload')
+    .form-group
+            button.btn.btn-primary(type='submit') Submit

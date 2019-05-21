@@ -1,0 +1,7 @@
+mixin vignette(imageName, caption)
+  div.vignette
+    img(src=imageName  style='width:200px; height:200px')
+    h4.image-caption= caption
+
++vignette("https://s3-eu-west-1.amazonaws.com/darwinjocelyn/chat2.jpg", "Un joli chat.")
++vignette("https://s3-eu-west-1.amazonaws.com/darwinjocelyn/chat1.jpg", "Encore un beau chat")

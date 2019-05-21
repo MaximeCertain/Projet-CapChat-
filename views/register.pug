@@ -1,0 +1,28 @@
+head
+    style
+        include style.css
+        include bootstrap.min.css
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
+    a.navbar-brand(href='#') Inscription
+
+form(method='post', action='register', enctype='multipart/form-data')
+    fieldset
+        legend S'inscrire
+        .form-group.row
+        .form-group
+            label Nom
+            input.form-control(type='text', aria-describedby='emailHelp', placeholder='Enter FirstName', name='nom')
+            small.form-text.text-muted We'll never share your email with anyone else.
+        .form-group
+            label Prénom
+            input.form-control(type='text', aria-describedby='emailHelp', placeholder='Enter LastName', name='prenom')
+            small.form-text.text-muted We'll never share your email with anyone else.
+        .form-group
+            label Email
+            input.form-control(type='email', aria-describedby='emailHelp', placeholder='Enter email', name='email')
+            small.form-text.text-muted We'll never share your email with anyone else.
+        .form-group
+            label Mot de Passe
+            input.form-control(type='password', aria-describedby='emailHelp', placeholder='Enter email', name='pass')
+            small.form-text.text-muted We'll never share your email with anyone else.
+    button.btn.btn-primary(type='submit') Submit

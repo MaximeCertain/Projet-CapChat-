@@ -1,0 +1,19 @@
+html
+    include header.pug
+mixin vignetteCapchat(nom, theme, jeu, url)
+    tr.vignette
+     td.nom= nom
+     td.theme= theme
+     td.jeu= jeu
+     td.url= url
+h2= "Liste des jeux "
+table.table.table-hover
+    thead
+        tr
+            th(scope='col') Artiste
+            th(scope='col') Thème
+            th(scope='col') jeu
+            th(scope='col') Url du jeu
+    tbody
+    each jeu in jeux
+        +vignetteCapchat(jeu.nom, jeu.tLibelle, jeu.jLibelle, jeu.url)

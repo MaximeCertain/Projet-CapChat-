@@ -1,0 +1,27 @@
+html
+    include header.pug
+mixin vignetteCapchat(nom, prenom, pass, mail, id)
+    tr.vignette
+        td.nom= nom
+        td.prenom= prenom
+        td.pass= pass
+        td.mail= mail
+        td
+            button.btn-success(onclick="location.href='artistes/" + id + "'", type='button')
+                | www.example.com
+
+button.btn.btn-success(onclick="location.href='addArtiste'", type='button')
+    | Ajouter un artiste
+
+h2= "Liste des Artistes"
+table.table.table-hover
+    thead
+        tr
+            th(scope='col') nom
+            th(scope='col') prenom
+            th(scope='col') pass
+            th(scope='col') mail
+            th(scope='col') Modifier
+    tbody
+    each artiste in artistes
+        +vignetteCapchat(artiste.nom, artiste.prenom, artiste.pass , artiste.mail, artiste.id)
