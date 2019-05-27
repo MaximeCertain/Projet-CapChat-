@@ -62,7 +62,7 @@ var question;
 var singuliers =[];
     var neutres = [];
 var imagesSingulieres = [];
-var maxWidth =100;
+var maxWidth =1000;
 
 function load()
 {

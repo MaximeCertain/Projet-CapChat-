@@ -47,8 +47,7 @@ img.addEventListener('load', function() {
    ctx.stroke();
 }, false);
 //var getTest ="<%= imagesCapChat[0][0] %>";  //var test is now assigned to getTest which will only work on browsers
-img.src = "<%= imagesCapChat[0][0] %>"; // Définit le chemin vers sa source
-
+img.src = "/neutres/chat_neutre_1.jpg"; // Définit le chemin vers sa source
 <% if(imagesCapChat[0][1] != ""){ %>
    minX = 0;
    maxX = 150;
@@ -61,6 +60,7 @@ img2.addEventListener('load', function() {
    ctx.stroke();
 }, false);
 img2.src = "<%= imagesCapChat[1][0] %>"; // Définit le chemin vers sa source
+// if url non vide aficher squestion
 <% if(imagesCapChat[1][1] != ""){ %>
    minX = 150;
    maxX = 300;
@@ -81,7 +81,7 @@ img3.src = "<%= imagesCapChat[2][0] %>"; // Définit le chemin vers sa source
   <% } %>
 
 var img4 = new Image();   // Crée un nouvel élément Image
-img4.addEventListener('load', function() {   
+img4.addEventListener('load', function() {
  ctx.drawImage(img4, 450, y,150,150);
  ctx.stroke();
 }, false);
@@ -93,7 +93,7 @@ img4.src = "<%= imagesCapChat[3][0] %>"; // Définit le chemin vers sa source
  maxY =150;
  <% } %>
 var img5 = new Image();   // Crée un nouvel élément Image
-img5.addEventListener('load', function() {   
+img5.addEventListener('load', function() {
 ctx.drawImage(img5,  0, 150,150,150);
 ctx.stroke();
 }, false);

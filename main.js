@@ -16,17 +16,18 @@ var stream = require('unzip-stream');
 var request = require('request'),
     zlib = require('zlib'),
     out = fs.createWriteStream('out');
+var session = require("express-session");
 
 
 app.set('view engine', 'pug');
 app.use(upload()); // configure middleware
-
+app.use(session({ secret:"capchat", resave : false, saveUninitialized: false, cookie: { sessionDuration : 6000}}));
 
 app.use(bodyParser.json()); // pour supporter json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); //  pour supporter  encoded url
 app.use(cors());
 var idSession = 0;
-
+var sess;
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -38,12 +39,19 @@ var con = mysql.createConnection({
 app.get('/login', function (req, res) {
     res.render('login');
 });
+app.get('/logout', function (req, res) {
+    if(req.session)
+    {
+        req.session.destroy((err) => {
+            console.log("exit");
+            res.redirect('/login');
+        })
+    }});
 app.post('/TryLogin', function(req, res){
     // Tentative de login (appelé par login.html)
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     obj = JSON.parse(JSON.stringify(req.body, null, " "));
-    con.connect(function(err) {
-        if (err) throw err;
+
         con.query("SELECT * FROM artiste where mail = ? AND pass = ?",  [obj.nom,
                 obj.pass],
             function (err, rows, fields) {
@@ -56,13 +64,9 @@ app.post('/TryLogin', function(req, res){
                 if (err) throw err;
                 console.log(idSession);
                 res.setHeader('token', token);
-              /*  res.json({
-                    success: true,
-                    message: 'Enjoy your token!',
-                    token:  token
-                });*/
-                res.redirect('/artistes');
-            });
+                req.session.token = token;
+
+                res.status(200).redirect('/artistes');
     });
  });
 
@@ -99,25 +103,19 @@ app.post('/registration', function(req, res){
 app.delete('/artistes/:id', function (req, res) {
     res.setHeader("Content-Type","application/json; charset=utf8");
     let id = req.params.id;
-    con.connect(function (err) {
-        if(err) throw err;
+
         let sql = mysql.format("DELETE FROM artiste WHERE id = ?",id);
         con.query(sql,function (err, result,fields) {
             if(err) throw err;
             res.status(200).end("Nombre de lignes supprimée : " + result.affectedRows);
-        });
     });
 });
 
 //Modifie un artiste créateur
 app.put('/artistes/:id',function (req,res) {
     console.log("oui pere");
-    res.setHeader("Content-Type","application/json; charset=utf8");
     obj = JSON.parse(JSON.stringify(req.body,null," "));
     let id = req.params.id;
-
-    con.connect(function (err) {
-        if(err) throw  err;
         console.log(id);
         console.log(obj);
         let sql = mysql.format("UPDATE artiste SET nom = ?, prenom = ? where id = ?",[obj.nom, obj.prenom, id]);
@@ -125,7 +123,6 @@ app.put('/artistes/:id',function (req,res) {
             if(err) throw err;
             res.status(200).end("Nombre de lignes modifiés: " + result.affectedRows);
         })
-    })
 });
 
 app.get('/addartiste', function(req, res) {
@@ -189,27 +186,39 @@ app.get('/uploadFiles',function(req,res){
 
 
 app.get('/themes', function (req, res) {
-    console.log(req);
-    con.query('SELECT *  FROM theme ', (err, rows, fields) => {
-        if (err) {
-            return next(err);
-        }
-        console.log(rows);
-        res.render('liste_themes', { themes: rows });
-    });
+    sess = req.session.token;
+    if(req.session.token){
+        con.query('SELECT *  FROM theme ', (err, rows, fields) => {
+            if (err) {
+                return next(err);
+            }
+            console.log(rows);
+            res.render('liste_themes', { themes: rows });
+        });
+    }else{
+        res.redirect('logout');
+    }
 });
 
 app.get('/artistes', function (req, res) {
-    con.query('SELECT *  FROM artiste ', (err, rows, fields) => {
-        if (err) {
-            return next(err);
-        }
-        console.log(rows);
-        res.render('liste_artistes', { artistes: rows });
-    });
+    sess = req.session.token;
+    if(req.session.token){
+        con.query('SELECT *  FROM artiste ', (err, rows, fields) => {
+            if (err) {
+                return next(err);
+            }
+            console.log(rows);
+            res.render('liste_artistes', { artistes: rows });
+        });
+    }else{
+        res.redirect('logout');
+    }
+
 });
 
 app.get('/capchats', function (req, res) {
+    sess = req.session.token;
+    if(req.session.token){
     con.query('SELECT nom, url, theme.libelle as tLibelle, jeu_image.libelle as jLibelle' +
         '  FROM jeu_image inner join theme on themeId = theme.id inner join artiste on artisteId = artiste.id ', (err, rows, fields) => {
         if (err) {
@@ -218,6 +227,9 @@ app.get('/capchats', function (req, res) {
         console.log(rows);
         res.render('liste_capchat', { jeux: rows });
     });
+    }else{
+        res.redirect('logout');
+    }
 });
 
 app.use(express.static('forms'));
