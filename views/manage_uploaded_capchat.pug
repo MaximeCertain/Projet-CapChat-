@@ -1,0 +1,15 @@
+html
+    include header.pug
+
+
+.row
+    img.col-md-6(src='')
+    .col-md-2
+        input#scales(type='checkbox', name='scales', checked='')
+        label(for='scales') Neutres
+    .col-md-2
+        input#horns(type='checkbox', name='horns')
+        label(for='horns') Singulières
+    .form-group.col-md-2
+        label.col-form-label(for='inputDefault') Default input
+        input#inputDefault.form-control(type='text', placeholder='Default input')
