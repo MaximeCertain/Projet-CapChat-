@@ -111,6 +111,10 @@ app.delete('/artistes/:id', function (req, res) {
     });
 });
 
+app.get('/ban', function(req,res){
+    res.end("ended");
+});
+
 //Modifie un artiste créateur
 app.put('/artistes/:id',function (req,res) {
     console.log("oui pere");
@@ -186,8 +190,6 @@ app.get('/uploadFiles',function(req,res){
 
 
 app.get('/themes', function (req, res) {
-    sess = req.session.token;
-    if(req.session.token){
         con.query('SELECT *  FROM theme ', (err, rows, fields) => {
             if (err) {
                 return next(err);
@@ -195,9 +197,7 @@ app.get('/themes', function (req, res) {
             console.log(rows);
             res.render('liste_themes', { themes: rows });
         });
-    }else{
-        res.redirect('logout');
-    }
+
 });
 
 app.get('/artistes', function (req, res) {
@@ -213,12 +213,10 @@ app.get('/artistes', function (req, res) {
     }else{
         res.redirect('logout');
     }
-
 });
 
+
 app.get('/capchats', function (req, res) {
-    sess = req.session.token;
-    if(req.session.token){
     con.query('SELECT nom, url, theme.libelle as tLibelle, jeu_image.libelle as jLibelle' +
         '  FROM jeu_image inner join theme on themeId = theme.id inner join artiste on artisteId = artiste.id ', (err, rows, fields) => {
         if (err) {
@@ -227,9 +225,45 @@ app.get('/capchats', function (req, res) {
         console.log(rows);
         res.render('liste_capchat', { jeux: rows });
     });
-    }else{
-        res.redirect('logout');
-    }
+
+});
+var interval = 70;
+app.get('/testCapchat', function (req, res) {
+    interval = 70;
+    con.query('SELECT *  FROM Image ', (err, rows, fields) => {
+        if (err) {
+            return next(err);
+        }
+        res.render('capchat', { images: rows, interval: interval });
+    });
+
+
+});
+app.get('/continueTestCapchat', function (req, res) {
+    console.log("oui");
+    con.query('SELECT *  FROM Image ', (err, rows, fields) => {
+        if (err) {
+            return next(err);
+        }
+        res.render('capchat', { images: rows, interval: interval });
+    });
+});
+app.get('/verify/:id', function (req, res) {
+var img;
+    con.query('SELECT *  FROM Image where id = ?', [req.params.id], (err, rows, fields) => {
+       img =  (rows[0]);
+        if (err) {
+            throw err;
+        }
+        console.log(img);
+        if(img.type === 2){
+            res.render('capchat_success')
+        }
+        else{
+            interval = interval -5;
+            res.redirect('/continueTestCapchat')
+        }
+    });
 });
 
 app.use(express.static('forms'));

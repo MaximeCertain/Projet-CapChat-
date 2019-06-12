@@ -1,0 +1,41 @@
+head
+    style
+        include style.css
+        include bootstrap.min.css
+h2(id ="interval", style="display:none")= interval
+h2(id="interval2")= "Il vous reste " + interval/10 + "secondes"
+
+div
+    each img in images
+        a(href='verify/' + img.id): img(class='col-md-3 col-xs-6', src="/upload/" + img.url)
+
+#myProgress(class="margin-top")
+    #myBar
+
+script.
+        var elem = document.getElementById("myBar");
+        var intervalRecup = (document.getElementById("interval").textContent);
+        var width = 0;
+        var id = setInterval(frame, parseInt(intervalRecup) );
+        if(intervalRecup <= 0){
+            window.location.href = "http://127.0.0.1:8083/ban";
+        }
+        console.log(elem.innerText);
+        if (elem.innerText === "100%") {
+            console.log("rediriger page echec temps dépassé")
+        }
+        function frame() {
+
+            if (width >= 100) {
+                clearInterval(id);
+                window.location.href = "http://127.0.0.1:8083/ban";
+
+            } else {
+                width++;
+                elem.style.width = width + '%';
+                elem.innerHTML = width * 1 + '%';
+            }
+        }
+
+
+

@@ -84,8 +84,7 @@ singuliers.forEach(element => {
 var rand = imagesSingulieres[Math.floor(Math.random() * imagesSingulieres.length)];
 
 imagesCapChat.push(rand);
-//ajout images neutres 
-
+//ajout images neutres
 for(var i =0; i<=6; i++){
     var rand = neutres[Math.floor(Math.random() * neutres.length)];
     imagesCapChat.push([rand, ""]);
@@ -100,9 +99,8 @@ for(i=0;i<imagesCapChat.length;i++) {
     }
      };
      console.log(question);
-
     }
-app.get('/rate', function(req, res) { 
+app.get('/rate', function(req, res){
     maxWidth = maxWidth -5;
     load();  
     res.render('test.ejs', {imagesCapChat: imagesCapChat, question : question, maxWidth:maxWidth});
